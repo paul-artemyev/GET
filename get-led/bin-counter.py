@@ -1,4 +1,4 @@
-import time as t
+import time
 import RPi.GPIO as GPIO
 
 GPIO.setmode(BCM)
@@ -26,8 +26,12 @@ GPIO.output(23, 0)
 GPIO.output(22, 0)
 GPIO.output(24, 0)
 
-GPIO.setup(9, GPIO.IN)
-GPIO.setup(10, GPIO.IN)
+up_button = 9
+down_button = 10
+
+GPIO.setup(up_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(down_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
 
 num = 0
 
@@ -37,8 +41,22 @@ def dec2bin(value):
 sleep_time = 0.2
 
 while True:
-    if GPIO.input(up):
-        num += 1
+    if GPIO.input(up_button):
+        if num < 255:
+            num += 1
         print(num, dec2bin(num))
-        t.sleep(sleep_time)
-GPIO.setup(9, GPIO.IN)
+        time.sleep(sleep_time)
+    
+    if GPIO.input(down_button):
+        if num > 0:
+            num -= 1
+        print(num, dec2bin(num))
+        time.sleep(sleep_time)
+
+    binary_value = dec2bin(num)
+    for i in range(8):
+        GPIO.output(leds[i], binary_value[i])
+
+
+for pin in leds:
+    GPIO.output(pin, 0)
