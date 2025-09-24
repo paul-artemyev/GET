@@ -1,15 +1,24 @@
 import RPi.GPIO as GPIO
 
-GPIO.setmode(BCM)
 
-led = 16
+GPIO.setmode(GPIO.BCM)
+
+t_leds = [16, 12, 25, 17, 27, 23, 22, 24]
+
+for pin in t_leds:
+    GPIO.setup(pin, GPIO.OUT)
+
+for pin in t_leds:
+    GPIO.output(pin, 0)
+
+led = 26
 
 GPIO.setup(led, GPIO.OUT)
 
-state = 0
+t_pin = 6
 
-res = GPIO(state, GPIO.OUT)
+GPIO.setup(t_pin, GPIO.IN)
 
 while True:
-    GPIO(led, not res)
-    res = GPIO(state, GPIO.OUT)  
+    res = GPIO.input(t_pin)
+    GPIO.output(led, not res)

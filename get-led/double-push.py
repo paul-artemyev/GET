@@ -26,12 +26,20 @@ sleep_time = 0.2
 
 while True:
     if GPIO.input(up_button) > 0:
+        time.sleep(0.1)
+        if GPIO.input(down_button) > 0:
+            for pin in leds:
+                GPIO.output(pin, 1)
         if num < 255:
             num += 1
         print(num, dec2bin(num))
         time.sleep(sleep_time)
     
     if GPIO.input(down_button) > 0:
+        time.sleep(0.1)
+        if GPIO.input(up_button) > 0:
+            for pin in leds:
+                GPIO.output(pin, 1)
         if num < 255:
             num -= 1
         print(num, dec2bin(num))
