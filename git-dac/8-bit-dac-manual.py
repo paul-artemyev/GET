@@ -7,7 +7,7 @@ GPIO.setmode(GPIO.BCM)
 for pin in dac_bits:
     GPIO.setup(pin, GPIO.OUT)
 
-dynamic_range = 3.3
+dynamic_range = 3.05
 
 def voltage_to_number(voltage):
     if not (0.0 <= voltage <= dynamic_range):
