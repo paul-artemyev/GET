@@ -5,7 +5,7 @@ class MCP4725:
         self.bus = smbus.SMBus(1)
         
         self.address = address
-        self.wm = 0x40  # Режим записи в DAC регистр
+        self.wm = 0x00
         self.pds = 0x00
         
         self.verbose = verbose
@@ -40,7 +40,7 @@ class MCP4725:
 
 if __name__ == "__main__":
     try:
-        dac = MCP4725(3.290, 0x61, True)
+        dac = MCP4725(5.5, 0x61, True)
         
         while True:
             try:

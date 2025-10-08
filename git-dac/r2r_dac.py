@@ -31,8 +31,8 @@ if __name__ == "__main__":
         while True:
             try:
                 voltage = float(input("Введите напряжение в Вольтах: "))
-                number = dac.set_voltage(voltage)  # Получаем число
-                dac.set_number(number)             # Устанавливаем на ЦАП
+                number = dac.set_voltage(voltage)
+                dac.set_number(number)
             
             except ValueError:
                 print("Вы ввели не число. Попробуйте ещё раз\n")
