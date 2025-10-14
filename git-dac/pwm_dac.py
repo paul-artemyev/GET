@@ -15,7 +15,7 @@ class PWM_DAC:
         self.pwm.start(0)
 
     def deinit(self):
-        GPIO.output(self.gpio_bits, 0)
+        GPIO.output(self.gpio_pin, 0)
         GPIO.cleanup()
     
     def set_voltage(self, voltage):
