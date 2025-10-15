@@ -9,7 +9,7 @@ class PWM_DAC:
         self.verbose = verbose
 
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.gpio_pin, GPIO.OUT, initial = 0)
+        GPIO.setup(self.gpio_pin, GPIO.OUT)
 
         self.pwm = GPIO.PWM(self.gpio_pin, self.pwm_frequency)
         self.pwm.start(0)
@@ -33,7 +33,8 @@ class PWM_DAC:
 if __name__ == "__main__":
     try:
         dac = PWM_DAC(12, 10000, 3.290, True)
-        
+        dac.deinit()
+
         while True:
             try:
                 voltage = float(input("Введите напряжение в Вольтах: "))
