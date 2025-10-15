@@ -17,26 +17,25 @@ class MCP4725:
     def set_number(self, number):
         if not isinstance(number, int):
             print("На вход ЦАП можно подавать только целые числа")
-            return
 
         if not (0 <= number <= 4095):
-            print("Число выходит за разрядность MCP4725 (12 бит)")
-            return
+            print("Число выходит за разраядность MCP4752 (12 бит)")
 
-        first_byte = self.wm | (number >> 8)
+        first_byte = self.wm | self.pds | number >> 8
         second_byte = number & 0xFF
-        self.bus.write_byte_data(self.address, first_byte, second_byte)
+        self.bus.write_byte_data(0x61, first_byte, second_byte)
 
         if self.verbose:
-            print(f"Число: {number}, отправленные по I2C данные: [0x{(self.address << 1):02X}, 0x{first_byte:02X}, 0x{second_byte:02X}]")
+            print(f"Число: {number}, отправленные по I2C данные: [0x{(self.address << 1):02X}, 0x{first_byte:02X}, 0x{second_byte:02X}]\n")    
     
     def set_voltage(self, voltage):
         if not (0.0 <= voltage <= self.dynamic_range):
             print(f"Напряжение выходит за динамический диапазон ЦАП (0.00 - {self.dynamic_range:.2f} В)")
-            return
+            return 0
             
         number = int(voltage / self.dynamic_range * 4095)
         self.set_number(number)
+        return int(number)
 
 if __name__ == "__main__":
     try:
