@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO, time
 
-maxVoltage = 3.3
+maxVoltage = 255
 
 class R2R_ADC:
     def __init__(self, dynamic_range, compare_time = 0.01, verbose = False):
@@ -25,29 +25,30 @@ class R2R_ADC:
     
     def sequential_counting_adc(self):
         while True:
-            for value in range(255):
+            for value in range(200, 255, 1):
                 self.set_number(value)
-                time.sleep(0.01)
+                time.sleep(self.compare_time)
                 comparatorValue = GPIO.input(self.comp_gpio)
                 
                 if comparatorValue == 0:
-                    return maxVoltage
+                    return value
                 
-                return value
+            return maxVoltage
     
     def get_sc_voltage(self):
         digital_voltage = self.sequential_counting_adc()
-        voltage = digital_voltage/255*self.dynamic_range
+        voltage = digital_voltage*self.dynamic_range/255
 
         return voltage
 
 if __name__ == "__main__":
     try:
-        adc = R2R_ADC(3.05)
+        adc = R2R_ADC(3.281)
 
         while True:
             voltage = adc.get_sc_voltage()
             print(voltage)
+            time.sleep(1)
     
     finally:
         adc.deinit()
