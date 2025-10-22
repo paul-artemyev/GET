@@ -9,7 +9,7 @@ class PWM_DAC:
         self.verbose = verbose
 
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.gpio_pin, GPIO.OUT)
+        GPIO.setup(self.gpio_pin, GPIO.OUT, initial = 0)
 
         self.pwm = GPIO.PWM(self.gpio_pin, self.pwm_frequency)
         self.pwm.start(0)
@@ -32,8 +32,7 @@ class PWM_DAC:
 
 if __name__ == "__main__":
     try:
-        dac = PWM_DAC(12, 10000, 3.290, True)
-        dac.deinit()
+        dac = PWM_DAC(12, 500, 3.290, True)
 
         while True:
             try:

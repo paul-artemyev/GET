@@ -1,17 +1,17 @@
-import mcp4725_driver as mcp, time, tr_generator as tg, time
+import mcp4725_driver as mcp, tr_generator as tr, time
 
-amplitude = 3.2
+amplitude = 5
 signal_frequency = 10
 sampling_frequency = 1000
 
 try:
-    dac = mcp.MCP4725([16, 20, 21, 25, 26, 17, 27, 22], 3.05, True)
+    dac = mcp.MCP4725(5.5, 0x61, True)
     
     while True:
         current_time = time.time()
-        normalized_amplitude = tg.get_triangle_wave_amplitude(signal_frequency, current_time)
+        normalized_amplitude = tr.get_triangle_wave_amplitude(signal_frequency, current_time)
         voltage = normalized_amplitude*amplitude
-        number = dac.set_voltage(voltage)
-        tg.wait_for_sampling_period(1/sampling_frequency)
+        dac.set_voltage(voltage)
+        tr.wait_for_sampling_period(1/sampling_frequency)
 finally:
     dac.deinit()

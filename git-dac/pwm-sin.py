@@ -1,11 +1,11 @@
 import pwm_dac as pd, signal_generator as sg, time
 
-amplitude = 1
+amplitude = 10
 signal_frequency = 10
 sampling_frequency = 1000
 
 try:
-    dac = pd.PWM_DAC(12, 10000, 3.290, True)
+    dac = pd.PWM_DAC(12, 500, 20, True)
     
     while True:
         current_time = time.time()
