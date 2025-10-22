@@ -16,20 +16,19 @@ class R2R_ADC:
         GPIO.setup(self.comp_gpio, GPIO.IN)
 
     def deinit(self):
-        GPIO.output(self.gpio_bits, 0)
+        GPIO.output(self.bits_gpio, 0)
         GPIO.cleanup()
     
     def set_number(self, number):
         binary = [int(element) for element in bin(number)[2:].zfill(8)]
-        GPIO.output(self.gpio_bits, binary)
-        return signal
+        GPIO.output(self.bits_gpio, binary)
     
     def sequential_counting_adc(self):
         while True:
-            for value in range(256):
-                signal = self.set_number(value)
+            for value in range(255):
+                self.set_number(value)
                 time.sleep(0.01)
-                comparatorValue = GPIO.input(comparator)
+                comparatorValue = GPIO.input(self.comp_gpio)
                 
                 if comparatorValue == 0:
                     return maxVoltage
@@ -38,7 +37,7 @@ class R2R_ADC:
     
     def get_sc_voltage(self):
         digital_voltage = self.sequential_counting_adc()
-        voltage = digital_voltage/256*self.dynamic_range
+        voltage = digital_voltage/255*self.dynamic_range
 
         return voltage
 
