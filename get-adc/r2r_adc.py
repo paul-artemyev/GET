@@ -20,11 +20,11 @@ class R2R_ADC:
         GPIO.cleanup()
     
     def set_number(self, number):
-        binary = [int(element) for element in bin(number)[2:].zfill(8)]
+        binary = [int(element) for element in bin(number)[2:].zfill(8)][::1]
         GPIO.output(self.bits_gpio, binary)
     
     def sequential_counting_adc(self):
-        for value in range(10, 256):
+        for value in range(1, 256):
             self.set_number(value)
             time.sleep(self.compare_time)
             comparatorValue = GPIO.input(self.comp_gpio)
@@ -61,7 +61,7 @@ class R2R_ADC:
 
         return voltage
 
-'''if __name__ == "__main__":
+if __name__ == "__main__":
     try:
         adc = R2R_ADC(3.281)
 
@@ -71,7 +71,8 @@ class R2R_ADC:
             time.sleep(1)
     
     finally:
-        adc.deinit()'''
+        adc.deinit()
+
 
 
 if __name__ == "__main__":
