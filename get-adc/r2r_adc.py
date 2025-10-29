@@ -24,29 +24,62 @@ class R2R_ADC:
         GPIO.output(self.bits_gpio, binary)
     
     def sequential_counting_adc(self):
-        while True:
-            for value in range(200, 255, 1):
-                self.set_number(value)
-                time.sleep(self.compare_time)
-                comparatorValue = GPIO.input(self.comp_gpio)
+        for value in range(10, 256):
+            self.set_number(value)
+            time.sleep(self.compare_time)
+            comparatorValue = GPIO.input(self.comp_gpio)
                 
-                if comparatorValue == 0:
-                    return value
+            if comparatorValue == 0:
+                return value - 1
                 
-            return maxVoltage
+        return maxVoltage
     
     def get_sc_voltage(self):
         digital_voltage = self.sequential_counting_adc()
         voltage = digital_voltage*self.dynamic_range/255
 
         return voltage
+    
+    def successive_approximation_adc(self):
+        result = 0
+
+        for bit in range(7, -1, -1):
+            test_value = result | (1 << bit)
+            self.set_number(test_value)
+            time.sleep(self.compare_time)
+
+            comparator_value = GPIO.input(self.comp_gpio)
+
+            if comparator_value == 1:
+                result = test_value
+        
+        return result
+    
+    def get_sar_voltage(self):
+        digital_value = self.successive_approximation_adc()
+        voltage = digital_value*self.dynamic_range/255
+
+        return voltage
+
+'''if __name__ == "__main__":
+    try:
+        adc = R2R_ADC(3.281)
+
+        while True:
+            voltage = adc.get_sc_voltage()
+            print(voltage)
+            time.sleep(1)
+    
+    finally:
+        adc.deinit()'''
+
 
 if __name__ == "__main__":
     try:
         adc = R2R_ADC(3.281)
 
         while True:
-            voltage = adc.get_sc_voltage()
+            voltage = adc.get_sar_voltage()
             print(voltage)
             time.sleep(1)
     
