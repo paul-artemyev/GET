@@ -13,7 +13,11 @@ try:
     while(time.time() - start_time < duration):
         voltage_values.append(adc.get_sar_voltage())
         time_values.append(time.time() - start_time)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 5cc21fdca0fb5c9892df81bccb508a9e101457b8
     adc_plot.plot_voltage_vs_time(time_values, voltage_values, 3.5)
     adc_plot.plot_sampling_period_hist(time_values)
 
